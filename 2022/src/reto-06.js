@@ -1,47 +1,28 @@
 /* eslint-disable semi */
 /* eslint-disable quotes */
 
-export const getGiftsToRefill = (a1, a2, a3) => {
-  if (!a1 || !a2 || !a3) throw new Error();
+export const createCube = (size) => {
+  let cube = "";
+  // Creacion de linea de cara lateral
+  let lineaLatSup = "";
+  let lineaLatInf = "";
+  for (let i = 0; i < size; i++) {
+    lineaLatSup += "_\\";
+    lineaLatInf += "_/";
+  }
 
-  if (
-    typeof a1 !== "object" ||
-    typeof a2 !== "object" ||
-    typeof a3 !== "object"
-  )
-    throw new Error();
+  // Crear líneas de la mitad para arriba
+  for (let i = 1; i <= size; i++) {
+    cube += " ".repeat(size - i) + "/\\".repeat(i) + lineaLatSup + "\n";
+  }
 
-  const giftsToRefill = [];
+  // Crear líneas de la mitad para abajo
+  for (let i = size; i > 0; i--) {
+    cube += " ".repeat(size - i) + "\\/".repeat(i) + lineaLatInf;
+    if (i !== 1) {
+      cube += "\n";
+    }
+  }
 
-  a1.forEach((gift) => {
-    if (typeof gift !== "string") throw new Error();
-    if (
-      !a2.includes(gift) &&
-      !a3.includes(gift) &&
-      !giftsToRefill.includes(gift)
-    )
-      giftsToRefill.push(gift);
-  });
-
-  a2.forEach((gift) => {
-    if (typeof gift !== "string") throw new Error();
-    if (
-      !a1.includes(gift) &&
-      !a3.includes(gift) &&
-      !giftsToRefill.includes(gift)
-    )
-      giftsToRefill.push(gift);
-  });
-
-  a3.forEach((gift) => {
-    if (typeof gift !== "string") throw new Error();
-    if (
-      !a1.includes(gift) &&
-      !a2.includes(gift) &&
-      !giftsToRefill.includes(gift)
-    )
-      giftsToRefill.push(gift);
-  });
-
-  return giftsToRefill;
+  return cube;
 };
