@@ -1,47 +1,32 @@
 /* eslint-disable semi */
 /* eslint-disable quotes */
 
-export const getGiftsToRefill = (a1, a2, a3) => {
-  if (!a1 || !a2 || !a3) throw new Error();
+export const selectSleigh = (distance, sleighs) => {
+  let idealSleigh = {};
+  const totalConsumptions = [];
 
-  if (
-    typeof a1 !== "object" ||
-    typeof a2 !== "object" ||
-    typeof a3 !== "object"
-  )
-    throw new Error();
-
-  const giftsToRefill = [];
-
-  a1.forEach((gift) => {
-    if (typeof gift !== "string") throw new Error();
-    if (
-      !a2.includes(gift) &&
-      !a3.includes(gift) &&
-      !giftsToRefill.includes(gift)
-    )
-      giftsToRefill.push(gift);
+  sleighs.forEach((sleigh) => {
+    totalConsumptions.push(sleigh.consumption * distance);
   });
 
-  a2.forEach((gift) => {
-    if (typeof gift !== "string") throw new Error();
-    if (
-      !a1.includes(gift) &&
-      !a3.includes(gift) &&
-      !giftsToRefill.includes(gift)
-    )
-      giftsToRefill.push(gift);
+  for (let i = 0; i < totalConsumptions.length; i++) {
+    if (totalConsumptions[i] > 20) {
+      totalConsumptions.splice(i, 1);
+      i--;
+    }
+  }
+
+  if (totalConsumptions.length <= 0) return null;
+
+  const idealConsumption = Math.max(...totalConsumptions);
+
+  sleighs.forEach((sleigh) => {
+    if (sleigh.consumption * distance === idealConsumption) {
+      idealSleigh = sleigh;
+    }
   });
 
-  a3.forEach((gift) => {
-    if (typeof gift !== "string") throw new Error();
-    if (
-      !a1.includes(gift) &&
-      !a2.includes(gift) &&
-      !giftsToRefill.includes(gift)
-    )
-      giftsToRefill.push(gift);
-  });
+  console.log(idealConsumption);
 
-  return giftsToRefill;
+  return idealSleigh.name;
 };

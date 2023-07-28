@@ -1,47 +1,50 @@
 /* eslint-disable semi */
 /* eslint-disable quotes */
 
-export const getGiftsToRefill = (a1, a2, a3) => {
-  if (!a1 || !a2 || !a3) throw new Error();
+export const printTable = (gifts) => {
+  let giftColumnLength = "Gift".length;
+  let quantityColumnLength = "Quantity".length;
 
-  if (
-    typeof a1 !== "object" ||
-    typeof a2 !== "object" ||
-    typeof a3 !== "object"
-  )
-    throw new Error();
-
-  const giftsToRefill = [];
-
-  a1.forEach((gift) => {
-    if (typeof gift !== "string") throw new Error();
-    if (
-      !a2.includes(gift) &&
-      !a3.includes(gift) &&
-      !giftsToRefill.includes(gift)
-    )
-      giftsToRefill.push(gift);
+  gifts.forEach((gift) => {
+    if (gift.name.length > giftColumnLength) {
+      giftColumnLength = gift.name.length;
+    }
+    if (gift.quantity.toString().length > quantityColumnLength) {
+      quantityColumnLength = gift.quantity.toString().length;
+    }
   });
 
-  a2.forEach((gift) => {
-    if (typeof gift !== "string") throw new Error();
-    if (
-      !a1.includes(gift) &&
-      !a3.includes(gift) &&
-      !giftsToRefill.includes(gift)
-    )
-      giftsToRefill.push(gift);
+  const firstRow =
+    "+".repeat(giftColumnLength + quantityColumnLength + 7) + "\n";
+
+  const spacesAfterGift = " ".repeat(giftColumnLength - 3);
+  const spacesAfterQuantity = " ".repeat(quantityColumnLength - 7);
+  const secondRow =
+    "| Gift" + spacesAfterGift + "| Quantity" + spacesAfterQuantity + "|\n";
+
+  const giftDashes = "-".repeat(giftColumnLength);
+  const quantityDashes = "-".repeat(quantityColumnLength);
+  const thirdRow = "| " + giftDashes + " | " + quantityDashes + " |\n";
+
+  let table = firstRow + secondRow + thirdRow;
+
+  gifts.forEach((gift) => {
+    const spacesAfterName = " ".repeat(giftColumnLength - gift.name.length);
+    const spacesAfterQuantity = " ".repeat(
+      quantityColumnLength - gift.quantity.toString().length
+    );
+    const giftRow =
+      "| " +
+      gift.name +
+      spacesAfterName +
+      " | " +
+      gift.quantity +
+      spacesAfterQuantity +
+      " |\n";
+    table += giftRow;
   });
 
-  a3.forEach((gift) => {
-    if (typeof gift !== "string") throw new Error();
-    if (
-      !a1.includes(gift) &&
-      !a2.includes(gift) &&
-      !giftsToRefill.includes(gift)
-    )
-      giftsToRefill.push(gift);
-  });
+  table += "*".repeat(giftColumnLength + quantityColumnLength + 7);
 
-  return giftsToRefill;
+  return table;
 };

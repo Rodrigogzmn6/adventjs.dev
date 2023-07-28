@@ -1,47 +1,40 @@
 /* eslint-disable semi */
 /* eslint-disable quotes */
 
-export const getGiftsToRefill = (a1, a2, a3) => {
-  if (!a1 || !a2 || !a3) throw new Error();
+export const decorateTree = (base) => {
+  const decoratedTree = [base];
+  const possibleDecorations = ["B", "R", "P"];
 
-  if (
-    typeof a1 !== "object" ||
-    typeof a2 !== "object" ||
-    typeof a3 !== "object"
-  )
-    throw new Error();
+  const getFather = (left, right) => {
+    let father = "";
+    possibleDecorations.forEach((decoration) => {
+      if (left === right) father = left;
+      else if (
+        (decoration !== left && decoration !== right) ||
+        (decoration === left && decoration === right)
+      ) {
+        father = decoration;
+      }
+    });
+    return father;
+  };
 
-  const giftsToRefill = [];
+  // Número de filas del árbol
+  for (let i = 0; i < base.length - 1; i += 2) {
+    let nextRow = "";
+    for (
+      let j = 0;
+      j < decoratedTree[decoratedTree.length - 1].length - 1;
+      j += 2
+    ) {
+      nextRow +=
+        getFather(
+          decoratedTree[decoratedTree.length - 1][j],
+          decoratedTree[decoratedTree.length - 1][j + 2]
+        ) + " ";
+    }
+    decoratedTree.push(nextRow.slice(0, -1));
+  }
 
-  a1.forEach((gift) => {
-    if (typeof gift !== "string") throw new Error();
-    if (
-      !a2.includes(gift) &&
-      !a3.includes(gift) &&
-      !giftsToRefill.includes(gift)
-    )
-      giftsToRefill.push(gift);
-  });
-
-  a2.forEach((gift) => {
-    if (typeof gift !== "string") throw new Error();
-    if (
-      !a1.includes(gift) &&
-      !a3.includes(gift) &&
-      !giftsToRefill.includes(gift)
-    )
-      giftsToRefill.push(gift);
-  });
-
-  a3.forEach((gift) => {
-    if (typeof gift !== "string") throw new Error();
-    if (
-      !a1.includes(gift) &&
-      !a2.includes(gift) &&
-      !giftsToRefill.includes(gift)
-    )
-      giftsToRefill.push(gift);
-  });
-
-  return giftsToRefill;
+  return decoratedTree.reverse();
 };
